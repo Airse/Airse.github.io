@@ -4,7 +4,7 @@
 	<title>15 Puzzle</title>
 	<meta charset="UTF-8">
 	<meta name="description" content="15 puzzle game">
-	<meta name="keywords" content="slider, 15 puzzle, game, d3.js">
+	<meta name="keywords" content="slider, 15 puzzle, online, number, numbers, game, d3.js">
 	<meta name="author" content="Airse Cheeks">
 	<script type="text/javascript" src="js/d3.min.js"></script>
 	<script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
@@ -162,9 +162,13 @@
 						if (d.number == 0) { return "transparent"; }
 						return "#FFFFFF";
 				   })
-				   .text(function(d) {return d.number;});
+				   .text(function(d) {return d.number;})
+				   .on("click", function(d) {
+						move_number(d.number);
+				   });
 	</script>
 	<script>
+		var MOVE_DURATION = 180;
 		document.onkeydown = function(evt) {
 			evt = evt || window.event;
 			var keyCode = evt.keyCode;
@@ -174,6 +178,7 @@
 		};
 		window.addEventListener("keydown", keypressed, true);
 		var num_moves = 0;
+		var ok_to_move = true;
 		function move_number(num) {
 			var i = 0; var j = 0;
 			for (; i < numbers.length; i++) {
@@ -210,99 +215,115 @@
 			}
 		}
 		function move_block_up(i, j) {
+			if (!ok_to_move) {
+				return false;
+			}
 			if (i <= 0 || i > 3) {
 				return false;
 			}
+			ok_to_move = false;
 			// swap block with top
 			var num_btm = numbers[i][j];
 			var num_top = numbers[i-1][j];
 			numbers[i][j] = num_top;
 			numbers[i-1][j] = num_btm;
 			// visually move blocks
-			d3.select('#block-' + num_btm).transition().attr("y", function() {
+			d3.select('#block-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) - 105;
-			});
-			d3.select('#block-text-' + num_btm).transition().attr("y", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) - 105;
-			});
-			d3.select('#block-' + num_top).transition().attr("y", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) + 105;
-			});
-			d3.select('#block-text-' + num_top).transition().attr("y", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) + 105;
-			});
+			}).each("end", function() {ok_to_move = true;});
 			return true;
 		}
 		function move_block_down(i, j) {
+			if (!ok_to_move) {
+				return false;
+			}
 			if (i < 0 || i >= 3) {
 				return false;
 			}
+			ok_to_move = false;
 			// swap block with bottom
 			var num_btm = numbers[i+1][j];
 			var num_top = numbers[i][j];
 			numbers[i][j] = num_btm;
 			numbers[i+1][j] = num_top;
 			// visually move blocks
-			d3.select('#block-' + num_btm).transition().attr("y", function() {
+			d3.select('#block-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) - 105;
-			});
-			d3.select('#block-text-' + num_btm).transition().attr("y", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) - 105;
-			});
-			d3.select('#block-' + num_top).transition().attr("y", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) + 105;
-			});
-			d3.select('#block-text-' + num_top).transition().attr("y", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
 				return parseInt(this.getAttribute('y')) + 105;
-			});
+			}).each("end", function() {ok_to_move = true;});
 			return true;
 		}
 		function move_block_left(i, j) {
+			if (!ok_to_move) {
+				return false;
+			}
 			if (j <= 0 || j > 3) {
 				return false;
 			}
+			ok_to_move = false;
 			// swap block with left
 			var num_right = numbers[i][j];
 			var num_left = numbers[i][j-1];
 			numbers[i][j] = num_left;
 			numbers[i][j-1] = num_right;
 			// visually move blocks
-			d3.select('#block-' + num_right).transition().attr("x", function() {
+			d3.select('#block-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) - 105;
-			});
-			d3.select('#block-text-' + num_right).transition().attr("x", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) - 105;
-			});
-			d3.select('#block-' + num_left).transition().attr("x", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) + 105;
-			});
-			d3.select('#block-text-' + num_left).transition().attr("x", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) + 105;
-			});
+			}).each("end", function() {ok_to_move = true;});
 			return true;
 		}
 		function move_block_right(i, j) {
+			if (!ok_to_move) {
+				return false;
+			}
 			if (j < 0 || j >= 3) {
 				return false;
 			}
+			ok_to_move = false;
 			// swap block with right
 			var num_right = numbers[i][j+1];
 			var num_left = numbers[i][j];
 			numbers[i][j] = num_right;
 			numbers[i][j+1] = num_left;
 			// visually move blocks
-			d3.select('#block-' + num_right).transition().attr("x", function() {
+			d3.select('#block-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) - 105;
-			});
-			d3.select('#block-text-' + num_right).transition().attr("x", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) - 105;
-			});
-			d3.select('#block-' + num_left).transition().attr("x", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) + 105;
-			});
-			d3.select('#block-text-' + num_left).transition().attr("x", function() {
+			}).each("end", function() {ok_to_move = true;});
+			d3.select('#block-text-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
 				return parseInt(this.getAttribute('x')) + 105;
-			});
+			}).each("end", function() {ok_to_move = true;});
 			return true;
 		}
 		function keypressed(event) {

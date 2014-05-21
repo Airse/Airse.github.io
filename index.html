@@ -1,1 +1,201 @@
-"Hello World" 
+<!DOCTYPE html>
+<html>
+<head>
+	<title>15-Puzzle</title>
+	<script type="text/javascript" src="js/d3.min.js"></script>
+</head>
+<body style="text-align: center">
+	<script>
+		var blocks = [];
+		var initial_numbers = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]];
+		function validate() {
+			return initial_numbers == numbers;
+		}
+		function shuffle(numbers, i, j) {
+			for (var count = 0; count < 2000; count++) {
+				var random_num = Math.floor((Math.random() * 4) + 1);
+				var swap_i = i;
+				var swap_j = j;
+				switch(random_num) {
+					case 1:
+						swap_i--;
+						break;
+					case 2:
+						swap_i++;
+						break;
+					case 3:
+						swap_j--;
+						break;
+					default:
+						swap_j++;
+				}
+				if (swap_i < 0 || swap_i > 3 || swap_j < 0 || swap_j > 3) {
+					continue;
+				}
+				numbers[i][j] = numbers[swap_i][swap_j];
+				numbers[swap_i][swap_j] = 0;
+				i = swap_i; j = swap_j;
+			}
+			blank_i = i;
+			blank_j = j;
+		}
+		function get_color_by_num(num) {
+			var color_index = Math.floor((num-1)/4 + 1);
+			switch (color_index) {
+				case 1:
+					return "#FEBE7E";
+				case 2:
+					return "#EC7263";
+				case 3:
+					return "#A75265";
+				case 4:
+					return "#57385C";
+			}
+			return "transparent";
+		}
+		var numbers = initial_numbers;
+		var blank_i = 3; var blank_j = 3;
+		shuffle(numbers, blank_i, blank_j);
+		var x_values = [5, 110, 215, 320];
+		var y_values = [5, 110, 215, 320];
+		// populate blocks
+		var count = 0;
+		for (var i = 0; i < numbers.length; i++) {
+			for (var j = 0; j < numbers[i].length; j++) {
+				var color = get_color_by_num(numbers[i][j]);
+				var row = Math.floor((count/4));
+				var col = count%4;
+				blocks.push({
+					"number": numbers[i][j],
+					"color": color,
+					"x": x_values[col],
+					"y": y_values[row]
+				});
+				count++;
+			}
+		}
+		
+		var svg_container = d3.select('body').append('svg').attr('width', 425).attr('height', 425);
+		
+		svg_container.append("rect")
+					 .attr("x", 0)
+					 .attr("y", 0)
+					 .attr("width", 425)
+					 .attr("height", 425)
+					 .style("fill", "#FFEDBC");
+					
+		var block_rects = svg_container.selectAll("rect.blocks").data(blocks).enter().append("rect");
+		
+		block_rects.attr("id", function(d) {return "block-" + d.number})
+				   .attr("x", function(d) {return d.x;})
+				   .attr("y", function(d) {return d.y;})
+				   .attr("width", 100)
+				   .attr("height", 100)
+				   .style("fill", function(d) {return d.color;});
+	</script>
+	<script>
+		window.addEventListener("keydown", keypressed, true);
+		var num_moves = 0;
+		function move_block_up(i, j) {
+			if (i <= 0 || i > 3) {
+				return false;
+			}
+			// swap block with top
+			var num_btm = numbers[i][j];
+			var num_top = numbers[i-1][j];
+			numbers[i][j] = num_top;
+			numbers[i-1][j] = num_btm;
+			// visually move blocks
+			d3.select('#block-' + num_btm).transition().attr("y", function() {
+				return parseInt(this.getAttribute('y')) - 105;
+			});
+			d3.select('#block-' + num_top).transition().attr("y", function() {
+				return parseInt(this.getAttribute('y')) + 105;
+			});
+			return true;
+		}
+		function move_block_down(i, j) {
+			if (i < 0 || i >= 3) {
+				return false;
+			}
+			// swap block with bottom
+			var num_btm = numbers[i+1][j];
+			var num_top = numbers[i][j];
+			numbers[i][j] = num_btm;
+			numbers[i+1][j] = num_top;
+			// visually move blocks
+			d3.select('#block-' + num_btm).transition().attr("y", function() {
+				return parseInt(this.getAttribute('y')) - 105;
+			});
+			d3.select('#block-' + num_top).transition().attr("y", function() {
+				return parseInt(this.getAttribute('y')) + 105;
+			});
+			return true;
+		}
+		function move_block_left(i, j) {
+			if (j <= 0 || j > 3) {
+				return false;
+			}
+			// swap block with left
+			var num_right = numbers[i][j];
+			var num_left = numbers[i][j-1];
+			numbers[i][j] = num_left;
+			numbers[i][j-1] = num_right;
+			// visually move blocks
+			d3.select('#block-' + num_right).transition().attr("x", function() {
+				return parseInt(this.getAttribute('x')) - 105;
+			});
+			d3.select('#block-' + num_left).transition().attr("x", function() {
+				return parseInt(this.getAttribute('x')) + 105;
+			});
+			return true;
+		}
+		function move_block_right(i, j) {
+			if (j < 0 || j >= 3) {
+				return false;
+			}
+			// swap block with right
+			var num_right = numbers[i][j+1];
+			var num_left = numbers[i][j];
+			numbers[i][j] = num_right;
+			numbers[i][j+1] = num_left;
+			// visually move blocks
+			d3.select('#block-' + num_right).transition().attr("x", function() {
+				return parseInt(this.getAttribute('x')) - 105;
+			});
+			d3.select('#block-' + num_left).transition().attr("x", function() {
+				return parseInt(this.getAttribute('x')) + 105;
+			});
+			return true;
+		}
+		function keypressed(event) {
+			switch (event.keyCode) {
+				case 38: // up
+					if (move_block_up(blank_i + 1, blank_j)) {
+						num_moves++;
+						blank_i = blank_i + 1;
+					}
+					break;
+				case 40: // down
+					if (move_block_down(blank_i - 1, blank_j)) {
+						num_moves++;
+						blank_i = blank_i - 1;
+					}
+					break;
+				case 37: // left
+					if (move_block_left(blank_i, blank_j + 1)) {
+						num_moves++;
+						blank_j = blank_j + 1;
+					}
+					break;
+				case 39: // right
+					if (move_block_right(blank_i, blank_j - 1)) {
+						num_moves++;
+						blank_j = blank_j - 1;
+					}
+					break;
+			}
+		}
+	</script>
+</body>
+</html>

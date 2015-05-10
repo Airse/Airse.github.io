@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>15 Puzzle</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="15 puzzle game made with d3.js">
+    <meta name="keywords" content="slider, 15 puzzle, online, number, numbers, game, d3.js">
+    <meta name="author" content="Airse Cheeks">
+    <script type="text/javascript" src="js/d3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Lato:700,400,900);
+        body {
+            font-family: 'Lato';
+            text-align: center;
+        }
+        #num-moves {
+            font-weight: bold;
+        }
+        a {
+            color: #EC7263;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #overlay {
+            position: absolute;
+            top: 200px;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 10;
+            background-color: rgba(0,0,0,0.5);
+            color: #FFFFFF;
+            font-size: 18pt;
+            font-weight: bold;
+            line-height: 200px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>15 Puzzle</h1>
+    <p>Number of moves: <span id="num-moves">0</span></p>
+    <div id="overlay">
+        You won! Refresh page to play again.
+    </div>
+    <script>
+        (function() {
+            var blocks = [];
+            var winning_numbers = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]];
+            function validate() {
+                $('#num-moves').text(num_moves);
+                if (compare(winning_numbers, numbers)) {
+                    $('#overlay').fadeIn();
+                }
+            }
+            function compare(arr1, arr2) {
+                for (var i = 0; i < arr1.length; i++) {
+                    for (var j = 0; j < arr1[i].length; j++) {
+                        if (arr1[i][j] != arr2[i][j]) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            function shuffle(numbers, i, j) {
+                for (var count = 0; count < 2000; count++) {
+                    var random_num = Math.floor((Math.random() * 4) + 1);
+                    var swap_i = i;
+                    var swap_j = j;
+                    switch(random_num) {
+                        case 1:
+                            swap_i--;
+                            break;
+                        case 2:
+                            swap_i++;
+                            break;
+                        case 3:
+                            swap_j--;
+                            break;
+                        default:
+                            swap_j++;
+                    }
+                    if (swap_i < 0 || swap_i > 3 || swap_j < 0 || swap_j > 3) {
+                        continue;
+                    }
+                    numbers[i][j] = numbers[swap_i][swap_j];
+                    numbers[swap_i][swap_j] = 0;
+                    i = swap_i; j = swap_j;
+                }
+                blank_i = i;
+                blank_j = j;
+            }
+            function get_color_by_num(num) {
+                var color_index = Math.floor((num - 1) / 4 + 1);
+                switch (color_index) {
+                    case 1:
+                        return "#FEBE7E";
+                    case 2:
+                        return "#EC7263";
+                    case 3:
+                        return "#A75265";
+                    case 4:
+                        return "#57385C";
+                }
+                return "transparent";
+            }
+            var numbers = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]];
+            var blank_i = 3; var blank_j = 3;
+            shuffle(numbers, blank_i, blank_j);
+            var x_values = [5, 110, 215, 320];
+            var y_values = [5, 110, 215, 320];
+            // populate blocks
+            var count = 0;
+            for (var i = 0; i < numbers.length; i++) {
+                for (var j = 0; j < numbers[i].length; j++) {
+                    var color = get_color_by_num(numbers[i][j]);
+                    var row = Math.floor((count/4));
+                    var col = count%4;
+                    blocks.push({
+                        "number": numbers[i][j],
+                        "color": color,
+                        "x": x_values[col],
+                        "y": y_values[row]
+                    });
+                    count++;
+                }
+            }
+            
+            var svg_container = d3.select('body').append('svg').attr('width', 425).attr('height', 425);
+            
+            svg_container.append("rect")
+                         .attr("x", 0)
+                         .attr("y", 0)
+                         .attr("width", 425)
+                         .attr("height", 425)
+                         .style("fill", "#FFEDBC");
+                        
+            var block_rects = svg_container.selectAll("rect.blocks").data(blocks).enter().append("rect");
+            var block_texts = svg_container.selectAll("text.blocks").data(blocks).enter().append("text");
+            
+            block_rects.attr("id", function(d) {return "block-" + d.number})
+                       .attr("x", function(d) {return d.x;})
+                       .attr("y", function(d) {return d.y;})
+                       .attr("width", 100)
+                       .attr("height", 100)
+                       .style("fill", function(d) {return d.color;})
+                       .on("click", function(d) {
+                            move_number(d.number);
+                       });
+                       
+            block_texts.attr("id", function(d) {return "block-text-" + d.number})
+                       .attr("x", function(d) {return d.x + 50;})
+                       .attr("y", function(d) {return d.y + 65;})
+                       .attr("font-family", 'Lato, sans-serif')
+                       .attr("font-size", "40px")
+                       .attr("font-weight", "bold")
+                       .attr("text-anchor", "middle")
+                       .attr("fill", function(d) {
+                            if (d.number == 0) { return "transparent"; }
+                            return "#FFFFFF";
+                       })
+                       .text(function(d) {return d.number;})
+                       .on("click", function(d) {
+                            move_number(d.number);
+                       });
+
+
+            var MOVE_DURATION = 180;
+            document.onkeydown = function(evt) {
+                evt = evt || window.event;
+                var keyCode = evt.keyCode;
+                if (keyCode >= 37 && keyCode <= 40) {
+                    return false;
+                }
+            };
+            window.addEventListener("keydown", keypressed, true);
+            var num_moves = 0;
+            var ok_to_move = true;
+            function move_number(num) {
+                var i = 0; var j = 0;
+                for (; i < numbers.length; i++) {
+                    var is_found = false;
+                    for (j = 0; j < numbers[i].length; j++) {
+                        if (numbers[i][j] == num) {
+                            is_found = true;
+                            break;
+                        }
+                    }
+                    if (is_found) { break; }
+                }
+                
+                if (i - 1 == blank_i && j == blank_j) {
+                    move_block_up(i, j);
+                    blank_i = i;
+                    num_moves++;
+                    validate();
+                } else if (i + 1 == blank_i && j == blank_j) {
+                    move_block_down(i, j);
+                    blank_i = i;
+                    num_moves++;
+                    validate();
+                } else if (i == blank_i && j - 1 == blank_j) {
+                    move_block_left(i, j);
+                    blank_j = j;
+                    num_moves++;
+                    validate();
+                } else if (i == blank_i && j + 1 == blank_j) {
+                    move_block_right(i, j);
+                    blank_j = j;
+                    num_moves++;
+                    validate();
+                }
+            }
+            function move_block_up(i, j) {
+                if (!ok_to_move) {
+                    return false;
+                }
+                if (i <= 0 || i > 3) {
+                    return false;
+                }
+                ok_to_move = false;
+                // swap block with top
+                var num_btm = numbers[i][j];
+                var num_top = numbers[i-1][j];
+                numbers[i][j] = num_top;
+                numbers[i-1][j] = num_btm;
+                // visually move blocks
+                d3.select('#block-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                return true;
+            }
+            function move_block_down(i, j) {
+                if (!ok_to_move) {
+                    return false;
+                }
+                if (i < 0 || i >= 3) {
+                    return false;
+                }
+                ok_to_move = false;
+                // swap block with bottom
+                var num_btm = numbers[i+1][j];
+                var num_top = numbers[i][j];
+                numbers[i][j] = num_btm;
+                numbers[i+1][j] = num_top;
+                // visually move blocks
+                d3.select('#block-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_btm).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_top).transition().duration(MOVE_DURATION).attr("y", function() {
+                    return parseInt(this.getAttribute('y')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                return true;
+            }
+            function move_block_left(i, j) {
+                if (!ok_to_move) {
+                    return false;
+                }
+                if (j <= 0 || j > 3) {
+                    return false;
+                }
+                ok_to_move = false;
+                // swap block with left
+                var num_right = numbers[i][j];
+                var num_left = numbers[i][j-1];
+                numbers[i][j] = num_left;
+                numbers[i][j-1] = num_right;
+                // visually move blocks
+                d3.select('#block-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                return true;
+            }
+            function move_block_right(i, j) {
+                if (!ok_to_move) {
+                    return false;
+                }
+                if (j < 0 || j >= 3) {
+                    return false;
+                }
+                ok_to_move = false;
+                // swap block with right
+                var num_right = numbers[i][j+1];
+                var num_left = numbers[i][j];
+                numbers[i][j] = num_right;
+                numbers[i][j+1] = num_left;
+                // visually move blocks
+                d3.select('#block-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_right).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) - 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                d3.select('#block-text-' + num_left).transition().duration(MOVE_DURATION).attr("x", function() {
+                    return parseInt(this.getAttribute('x')) + 105;
+                }).each("end", function() {ok_to_move = true;});
+                return true;
+            }
+            function keypressed(event) {
+                switch (event.keyCode) {
+                    case 38: // up
+                        if (move_block_up(blank_i + 1, blank_j)) {
+                            num_moves++;
+                            blank_i = blank_i + 1;
+                            validate();
+                        }
+                        break;
+                    case 40: // down
+                        if (move_block_down(blank_i - 1, blank_j)) {
+                            num_moves++;
+                            blank_i = blank_i - 1;
+                            validate();
+                        }
+                        break;
+                    case 37: // left
+                        if (move_block_left(blank_i, blank_j + 1)) {
+                            num_moves++;
+                            blank_j = blank_j + 1;
+                            validate();
+                        }
+                        break;
+                    case 39: // right
+                        if (move_block_right(blank_i, blank_j - 1)) {
+                            num_moves++;
+                            blank_j = blank_j - 1;
+                            validate();
+                        }
+                        break;
+                }
+            }
+        })();
+    </script>
+    <p>
+        Created using <a href="http://d3js.org/" target="_blank">d3.js</a>.
+        Use the arrow keys or mouse to play.
+    </p>
+</body>
+</html>

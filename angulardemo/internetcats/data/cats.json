@@ -1,0 +1,41 @@
+{
+    "cats":
+        [
+            {
+                "id": "maru",
+                "name": "Maru"
+            },
+            {
+                "id": "monty",
+                "name": "Monty"
+            },
+            {
+                "id": "venus",
+                "name": "Venus"
+            },
+            {
+                "id": "grumpy",
+                "name": "Grumpy Cat"
+            },
+            {
+                "id": "hamilton",
+                "name": "Hamilton"
+            },
+            {
+                "id": "lilbub",
+                "name": "Lil Bub"
+            },
+            {
+                "id": "sam",
+                "name": "Sam"
+            },
+            {
+                "id": "shironeko",
+                "name": "Shironeko"
+            },
+            {
+                "id": "snoopy",
+                "name": "Snoopy"
+            }
+        ]
+}

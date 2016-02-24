@@ -1,0 +1,15 @@
+<div class="row search-container">
+  <input type="text" ng-model="searchQuery" placeholder="Search For Cat"></input>
+</div>
+<ul class="list-group row">
+  <div class="col-sm-4" ng-repeat="cat in cats | orderBy:'name' | filter: searchQuery">
+    <a ng-href="#/cat/{{cat.id}}">
+      <li class="cat-list-item list-group-item">
+        <div class="cat-list-item-container">
+          <img class="img-responsive" ng-src="img/{{cat.id}}.jpg">
+          <div class="cat-list-item-name" ng-bind="cat.name"></div>
+        </div>
+      </li>
+    </a>
+  </div>
+</ul>

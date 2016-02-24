@@ -1,0 +1,77 @@
+/* app css stylesheet */
+@import url(https://fonts.googleapis.com/css?family=Play);
+
+body {
+    padding: 0;
+    font-family: 'Play', sans-serif;
+}
+
+.brand {
+    text-align: center;
+    background-color: #C84630;
+    font-size: 20pt;
+    padding-top: 5pt;
+    padding-bottom: 5pt;
+    border-bottom: 5px solid #5C2849;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+a {
+    color: #FFFFFF;
+    text-decoration: none !important;
+    transition: color 0.3s ease;
+}
+
+a:visited {
+    color: #FFFFFF;
+}
+
+a:hover {
+    color: #EF7A85;
+}
+
+li.cat-list-item {
+    border: none;
+    text-align: center;
+    padding: 0;
+    padding-bottom: 30px;
+}
+
+li.cat-list-item img {
+    transition: filter 0.3s ease;
+    transition: -moz-filter 0.3s ease;
+    transition: -webkit-filter 0.3s ease;
+    -webkit-backface-visibility: hidden;
+}
+
+li.cat-list-item img:hover {
+    filter: brightness(50%);
+    -webkit-filter: brightness(50%);
+    -moz-filter: brightness(50%);
+}
+
+li.cat-list-item .cat-list-item-container {
+    display: inline-block;
+}
+
+li.cat-list-item .cat-list-item-name {
+    background-color: #C84630;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16pt;
+    width: 100%;
+}
+
+.search-container {
+    text-align: center;
+    margin-bottom: 20px;
+}

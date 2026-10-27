@@ -4,17 +4,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Privacy policy for you Member?.">
+    <meta name="theme-color" content="#F3EEE5">
     <title>Privacy policy — you Member?</title>
     <style>
-      :root { font-family: Roboto, Arial, sans-serif; color: #141513; background: #F3EEE5; font-synthesis: none; text-rendering: optimizeLegibility; }
+      :root {
+        color-scheme: light;
+        font-family: Roboto, Arial, sans-serif;
+        color: #141513;
+        background: #F3EEE5;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+      }
       * { box-sizing: border-box; }
       body { margin: 0; padding: 32px 16px; }
-      main { width: min(100%, 760px); margin: 0 auto; padding: clamp(24px, 5vw, 40px); background: #D6CDBD; border-radius: 16px; }
+      main { width: min(100%, 800px); margin: 0 auto; padding: clamp(24px, 5vw, 40px); background: #D6CDBD; border-radius: 16px; }
       .brand { margin: 0 0 32px; font-size: 14px; font-weight: 500; }
-      h1 { margin: 0 0 24px; font-size: clamp(28px, 6vw, 36px); font-weight: 600; line-height: 1.2; }
-      p { color: #35342F; font-size: 14px; line-height: 1.5; }
-      .draft { padding: 16px; background: #F3EEE5; border-radius: 12px; }
+      h1 { margin: 0 0 12px; font-size: clamp(28px, 6vw, 36px); font-weight: 600; line-height: 1.2; }
+      .updated { margin: 0 0 24px; color: #35342F; font-size: 12px; }
+      .draft { margin: 24px 0; padding: 16px; border-radius: 12px; background: #F3EEE5; color: #35342F; font-size: 14px; line-height: 1.5; }
+      h2 { margin: 30px 0 8px; font-size: 20px; font-weight: 600; line-height: 1.25; }
+      p, li { color: #35342F; font-size: 14px; line-height: 1.6; }
+      ul { padding-left: 22px; }
+      li { margin: 6px 0; }
       a { color: #141513; text-underline-offset: 3px; }
+      .review { border-top: 2px solid #35342F; margin-top: 36px; padding-top: 20px; }
       :focus-visible { outline: 3px solid #35342F; outline-offset: 4px; }
     </style>
   </head>
@@ -22,9 +35,61 @@
     <main>
       <p class="brand">you Member?</p>
       <h1>Privacy policy</h1>
-      <p class="draft"><strong>Draft placeholder:</strong> Replace this page with the reviewed privacy policy before publishing or entering this URL in Google Play Console.</p>
-      <p>This page is for the you Member? app. The published policy should explain what account and card information the app collects, how it is used and shared, how long it is retained, and how users can exercise their privacy rights.</p>
-      <p>To request deletion of your account and associated data, visit the <a href="delete-account.html">account deletion page</a>.</p>
+      <p class="updated">Last updated: October 27, 2026</p>
+
+
+      <p>This policy applies to you Member? wherever the app is available and explains how we handle information when you use it. The app helps you save membership and loyalty card details, keep them available on your device, and share selected cards with people you choose.</p>
+
+      <p><strong>What not to store:</strong> you Member? is intended for membership, loyalty, and similar cards. Do not use it to store payment card numbers or security codes, bank account details, passwords, or other highly sensitive financial information.</p>
+
+      <h2>Who operates you Member?</h2>
+      <p>you Member? is operated by Erin Teo (“we”, “us”, or “our”). For privacy questions or requests, email <a href="mailto:airsecheeks+youmember@gmail.com">airsecheeks+youmember@gmail.com</a>.</p>
+
+      <h2>Information we handle</h2>
+      <ul>
+        <li><strong>Account and sign-in information:</strong> When you sign in with Google, we receive account information needed to create and authenticate your you Member? account, such as your email address, Google account identifier, and display name when available. Supabase Auth manages sign-in. We do not receive your Google password. Your app account also has an identifier and profile display name.</li>
+        <li><strong>Wallet information:</strong> Details you choose to save, such as card/provider name, nickname, provider website domain, membership or card number, notes, barcode or QR value and format, and folders you create.</li>
+        <li><strong>Attachments:</strong> If you attach a photo or PDF to a card, we store the file and its name, type, size, and related card information. Attachments are stored in private cloud storage.</li>
+        <li><strong>Friends and sharing:</strong> Account identifiers, display names, friend requests and relationship status, and the cards, folders, recipients, or all-friends scopes you choose to share. We use this information to find accounts you identify and to apply your sharing choices.</li>
+        <li><strong>Messages you send us:</strong> If you contact us for support or make a privacy request, we receive your email address and the contents of your message so we can respond and handle the request.</li>
+        <li><strong>App diagnostics:</strong> On Android, crash and error reporting is enabled by default to help us find and fix problems. Reports sent to Sentry may contain an app-defined error category, exception type, and stack trace. The app is configured to remove account details, wallet content, raw error messages, breadcrumbs, and user/device context from report events. Sentry may also process the network IP address associated with a report request. You can turn crash reporting off in Profile. Sentry retains submitted reports for 30 days; turning reporting off stops future reports but does not delete reports already sent.</li>
+        <li><strong>Advertising information:</strong> The Android app uses Google Mobile Ads to show non-personalized ads to users who are not on PRO. Google’s SDK may collect and share technical information such as IP address, app interactions, diagnostics, and device or account identifiers for ad delivery, reporting, and fraud prevention. Google’s consent tools present ad choices where required, and you can review available privacy choices in Profile. We do not send your saved card contents to Google for ad targeting. See <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Google’s Mobile Ads data disclosure</a> and <a href="https://policies.google.com/privacy">Google’s Privacy Policy</a>.</li>
+      </ul>
+      <p>Barcode scanning uses Google’s scanning components on your device. The value is saved and synced only if you choose to add it to a card. A scan does not by itself attach the source image to your wallet. If you separately attach a photo or PDF, that file is uploaded as described above.</p>
+
+      <h2>How we use information</h2>
+      <p>We use information to provide sign-in, save and sync your wallet, show cards offline, organize folders, manage friend relationships and the sharing scopes you choose, process attachments, provide non-personalized ads, protect the service, and diagnose errors. We do not use card contents to personalize ads.</p>
+
+      <h2>When information is shared</h2>
+      <ul>
+        <li><strong>People you choose:</strong> A recipient can view only the cards and attachments included in a share you create. A share with all accepted friends can also include future accepted friends while that share remains active. Friendship by itself does not give someone access to your cards.</li>
+        <li><strong>Service providers:</strong> Supabase provides account authentication, database, file storage, and server functions. Google provides Google sign-in and Android advertising and scanning components, and handles messages sent to our Gmail contact address. Sentry receives Android crash and error reports while reporting is enabled. These providers process information to provide their services to us under their own privacy and service terms.</li>
+        <li><strong>Legal and safety reasons:</strong> We may disclose information if required by law or where reasonably necessary to protect users, investigate misuse, or secure the service.</li>
+      </ul>
+      <p>We do not make your wallet public. We do not sell your card contents or share them with advertising providers for ad targeting.</p>
+
+      <h2>Where information is stored and processed</h2>
+      <p>Your account and synced wallet data are stored using Supabase in the ap-northeast-1 region (Tokyo, Japan). Service providers may process limited information in other countries to operate their services, provide support, deliver content, or protect against abuse.</p>
+      <p>Information is sent over encrypted network connections. The app keeps an encrypted local wallet cache on your device, and stores authentication sessions using platform-protected storage. This is not end-to-end encryption: information you sync is available to the service to provide sync and sharing.</p>
+
+      <h2>How long we keep information</h2>
+      <p>We retain your account and synced wallet information until you delete your account. You can also delete individual cards and other wallet items in the app. When you delete your account, we remove the account and its associated live wallet, profile, friend and sharing records, and uploaded files from our active systems.</p>
+      <p>We do not currently maintain independent or user-restorable backups. After deletion from our active systems, copies may remain temporarily in provider-managed recovery systems, if any, until they are removed under the providers’ retention practices. Sentry retains submitted crash and error reports for 30 days. Google and other providers may retain their own service records under their retention policies.</p>
+      <p>If you shared a card, a recipient may already have a copy in the app’s offline cache. We cannot remotely erase data already cached on another person’s device. That copy may remain available offline until their app refreshes or its local data is cleared.</p>
+
+      <h2>Your choices and deletion requests</h2>
+      <p>You can manage cards, attachments, friends, and sharing in the app. To delete your account, use <strong>Profile → Delete account</strong> and follow the confirmation steps. This removes the account and its associated data and signs you out. You can also request deletion by emailing us from the same email address you use to sign in; use the <a href="delete-account.html">account deletion page</a>.</p>
+      <p>You may also contact us to request access to or correction of your information. Depending on where you live, you may have additional rights under local privacy law. We may need to verify your identity before responding.</p>
+
+      <h2>Children</h2>
+      <p>you Member? is designed for a general audience and is not marketed to or specifically directed at children under 13. There is no age restriction on creating an account, and we do not ask users to provide their age. We do not knowingly solicit or collect personal information from children under 13. If we learn that a child under 13 has provided personal information to us, we will promptly review the information and take steps to delete it from our active systems. Copies in provider-managed recovery systems, if any, may remain temporarily as described under “How long we keep information.” Parents or legal guardians who believe a child has provided personal information may contact us at <a href="mailto:airsecheeks+youmember@gmail.com">airsecheeks+youmember@gmail.com</a> or visit our <a href="delete-account.html">account deletion page</a> to learn how to request deletion.</p>
+
+      <h2>Changes to this policy</h2>
+      <p>We may update this policy when the app or its data practices change. We will update the date at the top of this page. If a change is significant, we will provide an additional notice in the app or by another appropriate method.</p>
+
+      <h2>Contact</h2>
+      <p>For privacy questions or requests, contact <a href="mailto:airsecheeks+youmember@gmail.com">airsecheeks+youmember@gmail.com</a>.</p>
+
     </main>
   </body>
 </html>
